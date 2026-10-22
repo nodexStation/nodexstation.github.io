@@ -11,8 +11,7 @@ Positioning: *AI automations that sell, save time, and save money* — NodeX Sta
 | `index.html` | All page content: hero, story, how-it-works, capabilities, product preview, use cases, products, founder, FAQ, closing CTA, contact |
 | `styles.css` | All styling — cinematic dark theme, responsive, no frameworks, no build step |
 | `script.js` | Mobile menu, FAQ accordion, contact-form validation + mailto compose, footer year |
-| `three-hero.js` | Three.js hero visual (ember neural network) + scroll-linked camera drift |
-| `animations.js` | Scroll-progress bridge + GSAP hero intro, word reveals, workflow animation, scroll reveals |
+| `animations.js` | GSAP hero intro, orbital-visual parallax/drift, word reveals, workflow animation, scroll reveals |
 | `favicon.svg` | NodeX "NX" mark used as favicon and header logo |
 | `README.md` | This file |
 
@@ -41,7 +40,10 @@ headings with tight letter-spacing, uppercase micro-labels with wide
 tracking. **Layout voice:** spacious full-width statement sections,
 editorial numbering (01/02/03), spec-table rows (system INPUT/PROCESS/
 OUTPUT, capabilities list, starter pricing) separated by hairlines —
-minimal card grids by design.
+minimal card grids by design. Section bands alternate between the
+pure background and a faint deep-brown wash, panels share one radius
+and one warm layered shadow, and a barely-visible film grain sits
+over the whole page for a cinematic finish.
 
 **Human grounding (real material only):** a compact founder section —
 Fahim Ahmed Asif, Founder & CEO, his clothing/construction/supply/
@@ -51,47 +53,50 @@ outcome (AI FAQ/order automation saving ~10 hrs/week for a clothing
 brand). No testimonials, client logos, ratings, or invented metrics
 anywhere on the site.
 
-## Animations — Three.js + GSAP
+## Visuals & animation — CSS, SVG + GSAP
 
-Both layers are progressive enhancement: the page is complete and
-readable with the libraries missing, blocked, or disabled.
+Every visual on the page is hand-built CSS and inline SVG — there is
+no 3D library and nothing to compile. All motion layers are
+progressive enhancement: the page is complete and readable with
+animations disabled or the animation library missing.
 
-**Libraries (cdnjs, no local copies, no build step):** Three.js 0.160.0,
-GSAP 3.12.5, GSAP ScrollTrigger 3.12.5, plus Inter from Google Fonts.
-Script order at the end of `index.html`: `script.js` first, then the
-three CDN libraries, then `three-hero.js`, then `animations.js`.
+**Library (cdnjs, no local copy, no build step):** GSAP 3.12.5 +
+ScrollTrigger 3.12.5, plus Inter from Google Fonts. Script order at
+the end of `index.html`: `script.js`, then the GSAP CDN pair, then
+`animations.js`.
 
-**Three.js hero (`three-hero.js`)** — a full-bleed `<canvas
-id="hero-canvas">` behind the hero copy: a warm ember neural system of
-~64 orange/cream nodes linked to their nearest neighbours, a soft
-central glow, travelling light pulses on highlighted links, and a
-sparse ember-dust field. The network slowly rotates and breathes. A
-scroll-progress value (`window.__nxScroll`, published by a lightweight
-listener in `animations.js`) drifts the camera as the hero scrolls
-away; the mouse adds gentle parallax.
+**Hero visual (inline SVG + CSS keyframes)** — an orbital diagram of
+the agent system beside the hero copy: concentric hairline rings
+turning very slowly in opposite directions, a glowing core labelled
+“AI AGENT” with a soft pulse, channel nodes on the left (Messenger,
+Store, Email), outcome nodes on the right (Replies, Orders, Leads),
+thin connector paths, and twinkling ember dots. The atmosphere is
+pure CSS: layered warm radial glows (a restrained ember bloom, a
+soft cream bloom) and a film-grain overlay generated from an inline
+SVG noise filter at very low opacity.
 
-**GSAP (`animations.js`)** — hero intro stagger; story statements whose
-words light up progressively as you scroll (scrubbed); the workflow SVG
-drawing its connectors, then activating inputs → agent core → outcomes
-in sequence; a subtle parallax and looping run-highlight on the
-console preview; and one-time fade-up reveals for the capabilities
-rows, use cases, pricing rows, founder, FAQ and contact sections. All
-animation is driven from JS (`gsap.from` / `fromTo`) — no content is
+**GSAP (`animations.js`)** — hero intro stagger; a gentle scroll
+parallax and cursor drift on the orbital visual, with a slow idle
+float on the artwork; story statements whose words light up
+progressively as you scroll (scrubbed); the workflow SVG drawing its
+connectors, then activating inputs → agent core → outcomes in
+sequence; a subtle parallax and looping run-highlight on the console
+preview; and one-time fade-up reveals for the capabilities rows, use
+cases, pricing rows, founder, FAQ and contact sections. All GSAP
+motion is driven from JS (`gsap.from` / `fromTo`) — no content is
 ever hidden in CSS, so a failed library can never blank the page. No
 scroll pins and no loader overlay, by design.
 
 **Fallbacks & performance:**
 
-- Three.js CDN failure, missing WebGL, or any init error → the canvas
-  hides and the hero's CSS shade gradient carries the design.
-- GSAP failure → the page is static but fully functional; ScrollTrigger
-  failure alone still leaves the hero intro.
-- `prefers-reduced-motion` is honoured everywhere: the WebGL loop never
-  starts (canvas hidden), GSAP motion is skipped, and CSS transitions
-  are effectively disabled.
-- The render loop pauses when the tab is hidden or the hero is
-  off-screen (`IntersectionObserver`); `devicePixelRatio` is capped
-  at 2; resize is handled.
+- GSAP failure → the page is static but fully functional (the SVG
+  diagram and CSS keyframe motion still carry the hero);
+  ScrollTrigger failure alone still leaves the hero intro.
+- `prefers-reduced-motion` is honoured everywhere: GSAP motion is
+  skipped, CSS keyframe animations (rings, pulse, embers) are
+  switched off, and transitions are effectively disabled.
+- No render loops and no per-frame work outside GSAP's own ticker —
+  the page idles at zero cost.
 
 ## Run locally
 
@@ -115,8 +120,9 @@ it works from any static host.
    needed for a static root site. (Settings → Pages should read:
    Source “Deploy from a branch”, branch `main`, folder `/ (root)`.)
 3. Verify: open `https://nodexstation.github.io/`, hard-refresh
-   (Ctrl+Shift+R) to beat the CDN cache, and check the hero canvas,
-   the workflow diagram and the contact form on desktop and mobile.
+   (Ctrl+Shift+R) to beat the CDN cache, and check the hero orbital
+   diagram, the workflow diagram and the contact form on desktop
+   and mobile.
    Pages builds can queue for several minutes — check the repo's
    Actions tab (“pages build and deployment”) before assuming a push
    failed.

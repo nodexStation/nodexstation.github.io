@@ -1,8 +1,9 @@
 /* NodeX Station — premium cinematic dark theme.
    Warm near-black canvas, cream editorial type, deep brown surfaces,
    hairline borders, one restrained orange accent. Inter throughout.
-   No framework, no build step. Progressive: the page is complete and
-   readable with animations disabled or libraries missing. */
+   No framework, no build step — every visual is pure CSS + SVG.
+   Progressive: the page is complete and readable with animations
+   disabled or libraries missing. */
 
 :root{
   --bg:#100904;
@@ -17,11 +18,16 @@
   --muted-text:color-mix(in srgb, var(--cream) 58%, var(--muted));
   --accent:#dc5000;
   --accent-soft:rgba(220,80,0,.14);
+  --radius:20px;
+  --panel-shadow:0 40px 90px -42px rgba(0,0,0,.78),0 18px 34px -22px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,237,215,.05);
   --max:1240px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;scroll-padding-top:96px}
 body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--cream);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+/* Cinematic film grain — an SVG-noise wash over the whole page at a
+   whisper of opacity. Decorative only: it never takes pointer events. */
+body::after{content:"";position:fixed;inset:0;z-index:400;pointer-events:none;opacity:.038;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 img{max-width:100%}
 a{color:var(--cream);text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:4px;transition:color .2s,text-decoration-color .2s}
 a:hover{color:#fff;text-decoration-color:var(--accent)}
@@ -60,7 +66,7 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
 /* ── Buttons ────────────────────────────────────────────────────────── */
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:14px 30px;border-radius:999px;font-weight:600;font-size:1rem;text-decoration:none;border:1px solid transparent;cursor:pointer;font-family:inherit;transition:background .2s,color .2s,border-color .2s,transform .2s}
 .btn-accent{background:var(--accent);color:#fff}
-.btn-accent:hover{background:#ef5d0a;color:#fff;transform:translateY(-2px)}
+.btn-accent:hover{background:#ef5d0a;color:#fff;transform:translateY(-2px);box-shadow:0 14px 32px -12px rgba(220,80,0,.55)}
 .btn-ghost{background:transparent;color:var(--cream);border-color:var(--border)}
 .btn-ghost:hover{border-color:var(--cream);color:#fff;transform:translateY(-2px)}
 .btn-lg{min-height:60px;padding:18px 40px;font-size:1.08rem}
@@ -68,16 +74,52 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
 
 /* ── Hero ───────────────────────────────────────────────────────────── */
 .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;padding:150px 0 0}
-.hero-bg{position:absolute;inset:0;z-index:0}
-#hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
-.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,9,4,.42) 0%,rgba(16,9,4,0) 34%,rgba(16,9,4,.28) 68%,var(--bg) 100%)}
+/* Layered warm atmosphere: ember glow upper-right, a soft cream bloom
+   top-left, settling into the page background at the base. */
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(58% 46% at 80% 30%,rgba(220,80,0,.15),rgba(220,80,0,0) 62%),
+  radial-gradient(42% 34% at 16% 12%,rgba(255,237,215,.055),rgba(255,237,215,0) 65%),
+  radial-gradient(75% 55% at 50% 108%,rgba(56,36,22,.5),rgba(56,36,22,0) 70%)}
 .hero-inner{position:relative;z-index:1;width:100%}
+@media (min-width:1021px){
+  .hero-inner{display:grid;grid-template-columns:1.02fr .98fr;gap:48px;align-items:center}
+  .hero-actions{margin-bottom:0}
+}
 .eyebrow{color:var(--cream);display:inline-flex;align-items:center;gap:12px;margin-bottom:34px}
 .eyebrow::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent);flex-shrink:0;box-shadow:0 0 0 5px var(--accent-soft)}
-.hero h1{font-size:clamp(2.9rem,7.4vw,6.4rem);line-height:1.02;font-weight:800;letter-spacing:-.035em;margin-bottom:30px;max-width:13em}
+.hero h1{font-size:clamp(2.9rem,6.8vw,6rem);line-height:1.02;font-weight:800;letter-spacing:-.035em;margin-bottom:30px;max-width:13em}
 .hero h1 em{font-style:normal;color:var(--accent)}
 .hero-sub{font-size:clamp(1.08rem,1.6vw,1.3rem);color:var(--muted-text);max-width:600px;margin-bottom:42px;line-height:1.65}
 .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:74px}
+
+/* Orbital system visual — inline SVG, animated with CSS transforms.
+   Rings breathe around a pulsing core; channels sit on the left,
+   outcomes on the right. All motion is decorative and transform-only. */
+.hero-visual{position:relative;max-width:560px;width:100%;margin:6px auto 64px;pointer-events:none;will-change:transform}
+@media (min-width:1021px){.hero-visual{margin:0 auto}}
+.orbit-svg{width:100%;height:auto;display:block;overflow:visible}
+.orbit-ring{fill:none;stroke:var(--border);stroke-width:1}
+.orbit-ring-dash{stroke-dasharray:3 7;opacity:.85}
+.orbit-ring-faint{opacity:.5}
+.orbit-spin,.orbit-spin-rev{transform-box:fill-box;transform-origin:center}
+.orbit-spin{animation:orbit-rotate 140s linear infinite}
+.orbit-spin-rev{animation:orbit-rotate-rev 190s linear infinite}
+.orbit-ride{fill:var(--accent);opacity:.85}
+.orbit-ride.ride-cream{fill:var(--cream)}
+.orbit-links path{fill:none;stroke:var(--accent);stroke-width:1.1;opacity:.34}
+.orbit-node-ring{fill:var(--surface);stroke:var(--border)}
+.orbit-node-dot.dot-in{fill:var(--cream)}
+.orbit-node-dot.dot-out{fill:var(--accent)}
+.orbit-label{fill:var(--cream);font-family:inherit;font-size:14.5px;font-weight:600;letter-spacing:.01em}
+.orbit-core{fill:#241708;stroke:var(--accent);stroke-width:1.5}
+.orbit-core-pulse{fill:none;stroke:var(--accent);stroke-width:1;opacity:.5;transform-box:fill-box;transform-origin:center;animation:core-pulse 4.6s ease-in-out infinite}
+.orbit-core-word{fill:var(--cream);font-family:inherit;font-size:31px;font-weight:800;letter-spacing:.02em;text-anchor:middle}
+.orbit-core-sub{fill:var(--muted-text);font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.34em;text-anchor:middle}
+.ember{fill:var(--accent);opacity:.55;animation:ember-twinkle 5.5s ease-in-out infinite}
+@keyframes orbit-rotate{to{transform:rotate(360deg)}}
+@keyframes orbit-rotate-rev{to{transform:rotate(-360deg)}}
+@keyframes core-pulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.13);opacity:.12}}
+@keyframes ember-twinkle{0%,100%{opacity:.14}50%{opacity:.75}}
 .hero-spec-wrap{position:relative;z-index:1;width:100%}
 .hero-spec{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border)}
 .hero-spec>div{padding:22px 28px 26px 0}
@@ -86,13 +128,17 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
 .hero-spec dd{font-size:1.05rem;font-weight:600;letter-spacing:-.01em}
 
 /* ── Sections (shared) ──────────────────────────────────────────────── */
-.section{padding:130px 0;border-top:1px solid var(--border)}
+.section{padding:148px 0;border-top:1px solid var(--border)}
+/* Alternating warmth: every other band carries a faint deep-brown
+   wash that melts back into the background, so the page breathes in
+   a slow rhythm instead of sitting on one flat colour. */
+main>section:nth-of-type(even){background:linear-gradient(180deg,rgba(56,36,22,.34),rgba(56,36,22,.12) 58%,rgba(56,36,22,0))}
 .section-title{font-size:clamp(2.1rem,4.6vw,3.6rem);line-height:1.08;font-weight:800;letter-spacing:-.03em;margin-bottom:22px}
 .section-lead{color:var(--muted-text);max-width:620px;font-size:1.1rem;margin-bottom:56px}
 .section-lead a{color:var(--cream)}
 
 /* ── Story ──────────────────────────────────────────────────────────── */
-.story{padding:140px 0 30px}
+.story{padding:156px 0 40px}
 .story-block{display:grid;grid-template-columns:120px 1fr;gap:32px;padding:58px 0;border-top:1px solid var(--border)}
 .story-block:last-child{border-bottom:1px solid var(--border)}
 .story-index{font-size:clamp(2rem,3.4vw,3rem);font-weight:800;letter-spacing:-.03em;color:var(--muted);line-height:1}
@@ -100,7 +146,7 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
 .story-text{font-size:clamp(1.45rem,2.9vw,2.35rem);line-height:1.42;font-weight:600;letter-spacing:-.02em;max-width:22em}
 
 /* ── How it works — flow diagram ────────────────────────────────────── */
-.flow-wrap{border:1px solid var(--border);border-radius:18px;background:var(--surface-2);padding:36px 30px 26px;margin-bottom:58px}
+.flow-wrap{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-2);padding:36px 30px 26px;margin-bottom:58px;box-shadow:var(--panel-shadow)}
 .flow-svg{width:100%;height:auto;display:block}
 .flow-path{fill:none;stroke:var(--muted);stroke-width:1.4;opacity:.65}
 .flow-node rect{fill:var(--surface);stroke:var(--border);transition:stroke .3s}
@@ -131,7 +177,7 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
 .spec-item:hover .spec-arrow{transform:translateX(6px);color:var(--accent)}
 
 /* ── Product preview console ────────────────────────────────────────── */
-.console{background:var(--surface-2);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(0,0,0,.75)}
+.console{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--panel-shadow)}
 .console-head{display:flex;align-items:center;gap:18px;padding:16px 22px;border-bottom:1px solid var(--border)}
 .console-dots{display:inline-flex;gap:7px}
 .console-dots i{width:11px;height:11px;border-radius:50%;background:var(--border);display:block}
@@ -167,15 +213,16 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
 
 /* ── Use cases ──────────────────────────────────────────────────────── */
 .case-list{border-top:1px solid var(--border)}
-.case-row{display:grid;grid-template-columns:1.1fr 1fr 1fr 1fr;gap:36px;padding:44px 4px;border-bottom:1px solid var(--border)}
+.case-row{display:grid;grid-template-columns:1.1fr 1fr 1fr 1fr;gap:36px;padding:44px 4px;border-bottom:1px solid var(--border);transition:background .25s}
+.case-row:hover{background:rgba(255,237,215,.02)}
 .case-name{font-size:clamp(1.35rem,2.2vw,1.75rem);font-weight:700;letter-spacing:-.02em;line-height:1.25}
 .case-key{color:var(--accent);margin-bottom:12px}
 .case-cell p:last-child{color:var(--muted-text)}
 
 /* ── Products — spec-table pricing ──────────────────────────────────── */
 .price-table{border-top:1px solid var(--border)}
-.price-row{display:grid;grid-template-columns:1.25fr 1.6fr 110px 140px;gap:26px;align-items:baseline;padding:30px 6px;border-bottom:1px solid var(--border);transition:background .25s}
-.price-row:hover{background:rgba(255,237,215,.025)}
+.price-row{display:grid;grid-template-columns:1.25fr 1.6fr 110px 140px;gap:26px;align-items:baseline;padding:30px 6px;border-bottom:1px solid var(--border);transition:background .25s,padding-left .25s}
+.price-row:hover{background:rgba(255,237,215,.025);padding-left:16px}
 .price-name{font-size:clamp(1.2rem,2vw,1.5rem);font-weight:700;letter-spacing:-.02em}
 .price-inc{color:var(--muted-text)}
 .price-val{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;text-align:right}
@@ -183,7 +230,7 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
 
 /* ── Founder ────────────────────────────────────────────────────────── */
 .founder-wrap{display:grid;grid-template-columns:auto 1fr;gap:52px;align-items:start}
-.founder-mark{display:inline-flex;align-items:center;justify-content:center;width:104px;height:104px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--cream);font-weight:800;font-size:1.9rem;letter-spacing:.02em}
+.founder-mark{display:inline-flex;align-items:center;justify-content:center;width:104px;height:104px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--cream);font-weight:800;font-size:1.9rem;letter-spacing:.02em;box-shadow:inset 0 1px 0 rgba(255,237,215,.06),0 0 0 6px rgba(220,80,0,.07)}
 .founder-name{font-size:clamp(2rem,4vw,3.2rem);font-weight:800;letter-spacing:-.03em;line-height:1.1}
 .founder-role{color:var(--muted-text);font-size:1.1rem;margin:8px 0 28px}
 .founder-quote{font-size:clamp(1.35rem,2.5vw,1.9rem);font-weight:600;letter-spacing:-.02em;line-height:1.4;max-width:24em;margin-bottom:24px}
@@ -212,7 +259,7 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
 .contact-links li{display:flex;gap:22px;align-items:baseline;padding:15px 2px;border-bottom:1px solid var(--border)}
 .contact-links span{text-transform:uppercase;letter-spacing:.18em;font-size:.7rem;font-weight:700;color:var(--muted);width:92px;flex-shrink:0}
 .contact-links em{font-style:normal;color:var(--muted-text)}
-.contact-form{border:1px solid var(--border);border-radius:18px;padding:32px;background:var(--surface-2)}
+.contact-form{border:1px solid var(--border);border-radius:var(--radius);padding:32px;background:var(--surface-2);box-shadow:var(--panel-shadow)}
 .field{margin-bottom:20px}
 .field label{display:block;font-weight:600;margin-bottom:8px;font-size:.95rem}
 .field input,.field textarea{width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:11px;font:inherit;background:var(--bg);color:var(--cream);transition:border-color .2s,box-shadow .2s;min-height:44px}
@@ -243,7 +290,7 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
   .flow-steps{gap:30px}
 }
 @media (max-width:900px){
-  .section{padding:88px 0}
+  .section{padding:96px 0}
   .story{padding:90px 0 10px}
   .story-block{grid-template-columns:64px 1fr;gap:20px;padding:42px 0}
   .hero-spec{grid-template-columns:1fr}
@@ -281,8 +328,9 @@ a:hover{color:#fff;text-decoration-color:var(--accent)}
   .footer-bottom{padding:22px 20px 28px}
 }
 
-/* Reduced motion: kill smooth-scroll + transitions for those who ask */
+/* Reduced motion: kill smooth-scroll, transitions and every looping
+   animation (orbit rings, core pulse, ember twinkle) for those who ask */
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
-  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  *,*::before,*::after{transition-duration:.01ms!important;animation:none!important}
 }

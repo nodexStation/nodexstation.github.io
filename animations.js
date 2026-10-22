@@ -1,32 +1,20 @@
 /*
  * NodeX Station — GSAP cinematic scroll animations
  * ---------------------------------------------------
- * Progressive enhancement only:
- *  - A lightweight scroll listener ALWAYS runs (no GSAP needed) and
- *    publishes hero scroll progress as window.__nxScroll (0 at top →
- *    1 when the hero has scrolled away). three-hero.js reads it to
- *    drift its camera. This keeps the two files decoupled.
- *  - All motion uses gsap.from() / gsap.fromTo() driven by JS — no CSS
- *    hides animated content, so if the GSAP CDN fails the page is
- *    static and completely readable.
- *  - prefers-reduced-motion: no motion at all (the scroll listener
- *    still runs — it animates nothing by itself).
+ * Progressive enhancement only. The hero visual is pure CSS + inline
+ * SVG (its rings, pulse and embers are CSS keyframes); this file adds
+ * the GSAP layer on top:
+ *  - Hero intro, plus a gentle scroll parallax and mouse drift on the
+ *    orbital visual (transform-only, decorative layer).
+ *  - All motion uses gsap.from() / gsap.fromTo() / gsap.to() driven by
+ *    JS — no CSS hides animated content, so if the GSAP CDN fails the
+ *    page is static and completely readable.
+ *  - prefers-reduced-motion: no GSAP motion at all (CSS keyframe
+ *    motion is disabled in styles.css under the same preference).
  *  - No pins, no loader. Reveals fire once.
  */
 (function () {
   "use strict";
-
-  // ── Scroll progress bridge (independent of GSAP) ──────────────────
-  var hero = document.querySelector(".hero");
-  function publishScroll() {
-    if (!hero) { window.__nxScroll = 0; return; }
-    var h = hero.offsetHeight || window.innerHeight;
-    var y = window.scrollY || window.pageYOffset || 0;
-    window.__nxScroll = Math.min(Math.max(y / h, 0), 1);
-  }
-  publishScroll();
-  window.addEventListener("scroll", publishScroll, { passive: true });
-  window.addEventListener("resize", publishScroll);
 
   // ── Motion gate ────────────────────────────────────────────────────
   if (typeof window.gsap === "undefined") return;
@@ -51,6 +39,49 @@
   }
 
   if (!hasScrollTrigger) return; // Intro only — everything stays visible.
+
+  // ── Hero visual: scroll parallax + gentle mouse drift ──────────────
+  var heroVisual = document.querySelector(".hero-visual");
+  var heroSection = document.querySelector(".hero");
+  if (heroVisual && heroSection) {
+    // Drifts up slower than the page as the hero scrolls away.
+    gsap.to(heroVisual, {
+      y: -46,
+      ease: "none",
+      scrollTrigger: {
+        trigger: heroSection,
+        start: "top top",
+        end: "bottom top",
+        scrub: 0.7
+      }
+    });
+    // A slow idle float on the artwork itself, so the diagram feels
+    // alive even at rest (kept off the wrapper — no transform fights).
+    var orbitArt = heroVisual.querySelector(".orbit-svg");
+    if (orbitArt) {
+      gsap.to(orbitArt, {
+        y: -10,
+        duration: 3.6,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1
+      });
+    }
+    // The whole diagram leans a few pixels toward the cursor.
+    if (window.matchMedia("(pointer: fine)").matches && gsap.quickTo) {
+      var driftX = gsap.quickTo(heroVisual, "x", { duration: 0.9, ease: "power3.out" });
+      var driftR = gsap.quickTo(heroVisual, "rotation", { duration: 1.1, ease: "power3.out" });
+      heroSection.addEventListener("mousemove", function (e) {
+        var nx = e.clientX / window.innerWidth - 0.5;
+        driftX(nx * 16);
+        driftR(nx * 1.4);
+      });
+      heroSection.addEventListener("mouseleave", function () {
+        driftX(0);
+        driftR(0);
+      });
+    }
+  }
 
   // ── Group reveals ──────────────────────────────────────────────────
   function revealGroup(elements, triggerEl, opts) {
