@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NodeX Station">
+  <rect width="64" height="64" rx="14" fill="#0b1220"/>
+  <path d="M12 48V16h5.5l15 20.5V16h7.5v32h-5.5l-15-20.5V48H12z" fill="#ffffff"/>
+  <path d="M44 38l9 10m0-10l-9 10" stroke="#22c55e" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+</svg>
