@@ -11,10 +11,33 @@ Tagline: *We build MERN web apps, e-commerce systems & AI automations that help 
 | `index.html` | All page content: hero, about, services, process, products, FAQ, contact |
 | `styles.css` | All styling — responsive, no frameworks, no build step |
 | `script.js` | Mobile menu, FAQ accordion, contact-form validation + mailto compose, footer year |
-| `three-hero.js` | Three.js animated hero background (gold wireframe icosahedron + particle field) |
-| `animations.js` | GSAP hero intro timeline + ScrollTrigger scroll reveals |
+| `three-hero.js` | Three.js hero visual (glossy floating orbs + light wireframe icosahedron + particle field) |
+| `animations.js` | GSAP hero intro timeline, floating-card drift + ScrollTrigger scroll reveals |
 | `favicon.svg` | NodeX "NX" mark used as favicon and header logo |
 | `README.md` | This file |
+
+## Design
+
+Light, warm, modern agency-template look (redesigned 2026-10-22 from the
+original dark navy/gold version, which Ahmed felt didn't match):
+
+- Warm off-white background (`#FAF8F5`), ink-dark text, **emerald green**
+  primary accent, **amber** secondary accent.
+- Rounded-2xl cards with soft layered shadows, pill-shaped section labels,
+  big confident headings, generous whitespace, subtle CSS gradient-mesh
+  blobs behind the hero.
+- Two-column hero: copy on the left; on the right a soft rounded panel
+  holding the Three.js canvas, plus three pure HTML/CSS **floating cards**
+  (founder card with initials avatar, an "AI automation — 10 hrs/week saved
+  for a clothing brand" example-outcome card, and a Khulna/worldwide
+  location card).
+- The human touch is real material only: a founder profile card in About
+  (initials avatar, his clothing/construction/supply/marketing background,
+  and his line *"I run businesses too — so I build like an owner, not just
+  a developer."*) and a "you talk directly with the founder" note in
+  Contact. No testimonials, client logos, ratings, or invented numbers
+  anywhere on the site.
+- The footer stays dark for contrast, as modern templates do.
 
 ## Animations — Three.js + GSAP
 
@@ -34,34 +57,38 @@ Script order at the end of `index.html` matters: `script.js` (core site
 behaviour) first, then the three CDN libraries, then `three-hero.js`,
 then `animations.js`.
 
-**Three.js hero background (`three-hero.js`)** — a `<canvas id="hero-canvas">`
-sits absolutely positioned behind the hero content (`pointer-events: none`,
-hero content layered above it). The scene is on-brand black/gold: a slowly
-rotating gold wireframe icosahedron with a fainter inner shell and glowing
-vertices, plus a gold/white particle field with faint connecting lines.
-The camera drifts gently with the mouse (parallax). The renderer is
-transparent (`alpha: true`) so the existing hero gradient shows through.
+**Three.js hero visual (`three-hero.js`)** — a `<canvas id="hero-canvas">`
+fills the hero's rounded visual panel (`pointer-events: none`). The scene
+is matched to the light design: a cluster of gently bobbing glossy spheres
+(`MeshStandardMaterial` + ambient/directional lights) in emerald, amber,
+soft white and cream, a light emerald wireframe icosahedron, and a fine
+emerald/ink/amber particle field at low opacity. The camera drifts gently
+with the mouse (parallax). The renderer is transparent (`alpha: true`) so
+the panel's soft gradient shows through.
 
-**GSAP animations (`animations.js`)** — a staggered fade/slide intro for the
-hero text on page load, and ScrollTrigger fade-up reveals (slight stagger
-per group) for section headers, service cards, process steps, product cards,
-FAQ items, and the contact columns. Everything animates with `gsap.from()` —
-no element is ever hidden in CSS — so a failed animation can never leave
-content invisible.
+**GSAP animations (`animations.js`)** — a staggered fade/slide intro for
+the hero copy on page load, the visual panel fading/scaling in, the
+floating cards popping in with a back ease and then drifting on a gentle
+infinite yoyo float, plus ScrollTrigger fade-up reveals (slight stagger
+per group) for section headers, the founder card, service cards, process
+steps, product cards, FAQ items, and the contact columns. Everything
+animates with `gsap.from()` — no element is ever hidden in CSS — so a
+failed animation can never leave content invisible.
 
 **Fallbacks & performance:**
 
 - If the Three.js CDN fails, WebGL is unavailable, or initialisation throws,
-  the canvas is hidden and the hero looks exactly as it did before.
+  the canvas is hidden; the panel gradient and floating cards carry the
+  hero on their own.
 - If GSAP fails to load, `animations.js` exits silently; the page is static
   but fully functional. If only ScrollTrigger fails, the hero intro still
   plays and the scroll reveals are skipped.
 - `prefers-reduced-motion` is honoured in both files: the WebGL loop never
   starts and no GSAP animation runs.
 - The Three.js render loop pauses when the browser tab is hidden
-  (`visibilitychange`) and when the hero is scrolled off-screen
+  (`visibilitychange`) and when the hero panel is scrolled off-screen
   (`IntersectionObserver`). `devicePixelRatio` is capped at 2, and the scene
-  resizes with the hero.
+  resizes with the panel.
 
 ## Run locally
 

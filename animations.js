@@ -25,19 +25,54 @@
     gsap.registerPlugin(window.ScrollTrigger);
   }
 
-  // --- Hero intro: label, heading, lead, CTAs, points — staggered --------
-  var heroEls = document.querySelectorAll(
+  // --- Hero intro: copy first, then the visual panel and its cards --------
+  var heroCopy = document.querySelectorAll(
     ".hero .eyebrow, .hero h1, .hero .hero-sub, .hero .hero-actions, .hero .hero-points"
   );
-  if (heroEls.length) {
-    gsap.from(heroEls, {
+  var heroPanel = document.querySelectorAll(".hero .hero-panel");
+  var floatCards = document.querySelectorAll(".hero .float-card");
+
+  var intro = gsap.timeline({ defaults: { ease: "power2.out" } });
+  if (heroCopy.length) {
+    intro.from(heroCopy, {
       y: 26,
       opacity: 0,
       duration: 0.85,
-      ease: "power2.out",
       stagger: 0.12,
-      delay: 0.1,
       clearProps: "transform,opacity"
+    }, 0.1);
+  }
+  if (heroPanel.length) {
+    intro.from(heroPanel, {
+      y: 30,
+      opacity: 0,
+      scale: 0.97,
+      duration: 0.9,
+      clearProps: "transform,opacity"
+    }, 0.35);
+  }
+  if (floatCards.length) {
+    intro.from(floatCards, {
+      y: 24,
+      opacity: 0,
+      scale: 0.92,
+      duration: 0.65,
+      ease: "back.out(1.8)",
+      stagger: 0.14,
+      clearProps: "opacity,scale"
+    }, 0.75);
+    // …then the cards drift gently forever (transform-only yoyo float).
+    // Started after the intro so it never fights the entrance tween;
+    // clearProps above deliberately keeps transform for this to own.
+    intro.eventCallback("onComplete", function () {
+      gsap.to(floatCards, {
+        y: -10,
+        duration: 2.4,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+        stagger: 0.35
+      });
     });
   }
 
@@ -70,6 +105,7 @@
 
   // Content groups, staggered per group.
   revealGroup(document.querySelectorAll("#about .two-col > *"));
+  revealGroup(document.querySelectorAll("#about .founder-card"));
   revealGroup(document.querySelectorAll("#services .card"));
   revealGroup(document.querySelectorAll("#process .process-card"));
   revealGroup(document.querySelectorAll("#products .product-card"));

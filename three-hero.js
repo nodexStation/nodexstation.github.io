@@ -1,16 +1,19 @@
 /*
- * NodeX Station — Three.js hero background
- * -----------------------------------------
- * A slowly rotating gold wireframe icosahedron plus a gold/white particle
- * field with faint connecting lines, rendered on a transparent canvas
- * behind the hero content. Pure decoration (aria-hidden, pointer-events
- * off via CSS).
+ * NodeX Station — Three.js hero visual
+ * -------------------------------------
+ * A soft, modern scene matched to the site's light redesign: a cluster of
+ * gently floating glossy spheres in emerald, amber and soft white around a
+ * light wireframe icosahedron, over a fine emerald/ink particle field.
+ * Rendered on a transparent canvas inside the hero panel, behind the
+ * floating HTML cards. Pure decoration (aria-hidden, pointer-events off
+ * via CSS).
  *
  * Robustness contract:
  *  - If the Three.js CDN failed, WebGL is unavailable, or anything throws,
- *    the canvas is hidden and the site looks exactly as it did before.
+ *    the canvas is hidden and the hero panel + floating cards carry the
+ *    design on their own — zero visual damage.
  *  - prefers-reduced-motion: the animation never starts.
- *  - Rendering pauses when the tab is hidden or the hero is off-screen.
+ *  - Rendering pauses when the tab is hidden or the panel is off-screen.
  *  - devicePixelRatio is capped at 2 so high-DPI screens stay cheap.
  */
 (function () {
@@ -23,7 +26,7 @@
     canvas.style.display = "none";
   }
 
-  // Respect users who prefer reduced motion — leave the static hero as-is.
+  // Respect users who prefer reduced motion — leave the panel static.
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   if (reduceMotion.matches) {
     hideCanvas();
@@ -39,15 +42,15 @@
   try {
     init();
   } catch (err) {
-    // WebGL not available, context creation failed, etc. — static hero wins.
+    // WebGL not available, context creation failed, etc. — static panel wins.
     hideCanvas();
   }
 
   function init() {
-    var hero = canvas.parentElement;
+    var panel = canvas.parentElement;
     var THREE = window.THREE;
 
-    // --- Renderer (transparent, so the hero gradient shows through) ------
+    // --- Renderer (transparent, so the panel gradient shows through) -----
     var renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
@@ -57,146 +60,134 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    camera.position.set(0, 0, 9);
+    var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+    camera.position.set(0, 0, 9.5);
 
-    var GOLD = 0xd4af37;
-    var GOLD_LIGHT = 0xf5d67b;
-    var WHITE = 0xf8fafc;
+    // --- Lights (needed for the glossy standard materials) ----------------
+    scene.add(new THREE.AmbientLight(0xffffff, 0.95));
 
-    // --- Centrepiece: gold wireframe icosahedron -------------------------
-    var shapeGroup = new THREE.Group();
+    var keyLight = new THREE.DirectionalLight(0xffffff, 1.35);
+    keyLight.position.set(3.5, 5, 6);
+    scene.add(keyLight);
 
+    var warmLight = new THREE.DirectionalLight(0xffd9a0, 0.55);
+    warmLight.position.set(-5, -1.5, 3);
+    scene.add(warmLight);
+
+    // --- Palette ------------------------------------------------------------
+    var EMERALD = 0x0e9f6e;
+    var EMERALD_LIGHT = 0x5fd3a5;
+    var AMBER = 0xf5a623;
+    var AMBER_SOFT = 0xffcf87;
+    var WHITE = 0xffffff;
+    var CREAM = 0xfde9c8;
+
+    var worldGroup = new THREE.Group();
+    scene.add(worldGroup);
+
+    // --- Light wireframe icosahedron — the airy centrepiece -----------------
     var wire = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(2.55, 1),
+      new THREE.IcosahedronGeometry(1.85, 1),
       new THREE.MeshBasicMaterial({
-        color: GOLD,
+        color: 0x0a7a55,
         wireframe: true,
         transparent: true,
-        opacity: 0.5
+        opacity: 0.32
       })
     );
-    shapeGroup.add(wire);
+    wire.position.set(-0.9, 0.35, -0.6);
+    worldGroup.add(wire);
 
-    // A slightly smaller, even fainter inner shell for depth.
-    var inner = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(1.7, 0),
-      new THREE.MeshBasicMaterial({
-        color: GOLD_LIGHT,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.28
-      })
-    );
-    shapeGroup.add(inner);
-
-    // Glowing vertices on the outer shell.
+    // Small vertex dots on the wireframe for a bit of sparkle.
     var vertexDots = new THREE.Points(
-      new THREE.IcosahedronGeometry(2.55, 1),
+      new THREE.IcosahedronGeometry(1.85, 1),
       new THREE.PointsMaterial({
-        color: GOLD_LIGHT,
-        size: 0.07,
+        color: 0x0e9f6e,
+        size: 0.06,
         transparent: true,
-        opacity: 0.9
+        opacity: 0.75
       })
     );
-    shapeGroup.add(vertexDots);
+    vertexDots.position.copy(wire.position);
+    worldGroup.add(vertexDots);
 
-    scene.add(shapeGroup);
+    // --- Glossy floating orbs -------------------------------------------------
+    // [x, y, z, radius, colour]
+    var orbSpecs = [
+      [1.55, 0.95, 0.3, 1.08, EMERALD],        // hero orb, right
+      [2.55, -1.15, -0.4, 0.62, AMBER],        // warm companion
+      [0.55, -1.55, 0.6, 0.48, WHITE],         // soft white
+      [-2.35, -1.25, 0.1, 0.72, AMBER_SOFT],   // gentle amber, low left
+      [-2.7, 1.35, -0.8, 0.42, EMERALD_LIGHT], // small emerald, top left
+      [0.35, 1.85, -1.1, 0.5, CREAM],          // cream, top centre
+      [2.9, 1.7, -1.3, 0.34, EMERALD]          // tiny emerald accent
+    ];
+    var orbs = [];
+    orbSpecs.forEach(function (spec, i) {
+      var orb = new THREE.Mesh(
+        new THREE.SphereGeometry(spec[3], 48, 32),
+        new THREE.MeshStandardMaterial({
+          color: spec[4],
+          roughness: 0.22,
+          metalness: 0.05
+        })
+      );
+      orb.position.set(spec[0], spec[1], spec[2]);
+      worldGroup.add(orb);
+      orbs.push({
+        mesh: orb,
+        baseY: spec[1],
+        phase: i * 1.37,                    // spread the bobbing out of sync
+        speed: 0.55 + (i % 3) * 0.14,
+        amp: 0.14 + (i % 2) * 0.05
+      });
+    });
 
-    // --- Particle field with faint connecting lines ----------------------
-    var PARTICLE_COUNT = 340;
+    // --- Fine particle field (emerald / ink / amber, low opacity) ------------
+    var PARTICLE_COUNT = 260;
     var positions = new Float32Array(PARTICLE_COUNT * 3);
     var colors = new Float32Array(PARTICLE_COUNT * 3);
-    var goldColor = new THREE.Color(GOLD);
-    var goldLightColor = new THREE.Color(GOLD_LIGHT);
-    var whiteColor = new THREE.Color(WHITE);
-
+    var palette = [
+      new THREE.Color(EMERALD),
+      new THREE.Color(0x33413a), // soft ink
+      new THREE.Color(AMBER)
+    ];
     for (var i = 0; i < PARTICLE_COUNT; i++) {
-      // Spread particles in a flattened sphere-ish cloud.
-      var radius = 3.2 + Math.random() * 4.6;
-      var theta = Math.random() * Math.PI * 2;
-      var phi = Math.acos(2 * Math.random() - 1);
-      positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta) * 0.72;
-      positions[i * 3 + 2] = radius * Math.cos(phi) - 1.5;
-
-      var pick = Math.random();
-      var c = pick < 0.55 ? goldColor : (pick < 0.8 ? goldLightColor : whiteColor);
+      positions[i * 3] = (Math.random() - 0.5) * 10.5;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 6.4;
+      positions[i * 3 + 2] = -2.4 + Math.random() * 2.2;
+      var c = palette[i % 3 === 2 ? 2 : (i % 2)]; // mostly emerald/ink, some amber
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
     }
-
     var particleGeo = new THREE.BufferGeometry();
     particleGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     particleGeo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-
     var particles = new THREE.Points(
       particleGeo,
       new THREE.PointsMaterial({
         size: 0.05,
         vertexColors: true,
         transparent: true,
-        opacity: 0.85
+        opacity: 0.5,
+        depthWrite: false
       })
     );
-    scene.add(particles);
+    worldGroup.add(particles);
 
-    // Faint lines between nearby particles — the "connected network" feel.
-    // Computed once at load; the line group rotates together with the points,
-    // so the connections stay attached to their particles.
-    var linePositions = [];
-    var MAX_SEGMENTS = 420;
-    var CONNECT_DIST_SQ = 1.55 * 1.55;
-    for (var a = 0; a < PARTICLE_COUNT && linePositions.length / 6 < MAX_SEGMENTS; a++) {
-      for (var b = a + 1; b < PARTICLE_COUNT && linePositions.length / 6 < MAX_SEGMENTS; b++) {
-        var dx = positions[a * 3] - positions[b * 3];
-        var dy = positions[a * 3 + 1] - positions[b * 3 + 1];
-        var dz = positions[a * 3 + 2] - positions[b * 3 + 2];
-        if (dx * dx + dy * dy + dz * dz < CONNECT_DIST_SQ) {
-          linePositions.push(
-            positions[a * 3], positions[a * 3 + 1], positions[a * 3 + 2],
-            positions[b * 3], positions[b * 3 + 1], positions[b * 3 + 2]
-          );
-        }
-      }
-    }
-    var lineGeo = new THREE.BufferGeometry();
-    lineGeo.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(linePositions, 3)
-    );
-    var lines = new THREE.LineSegments(
-      lineGeo,
-      new THREE.LineBasicMaterial({
-        color: GOLD,
-        transparent: true,
-        opacity: 0.13
-      })
-    );
-    // Lines share the particles' transform so they rotate as one field.
-    var fieldGroup = new THREE.Group();
-    scene.remove(particles);
-    fieldGroup.add(particles);
-    fieldGroup.add(lines);
-    scene.add(fieldGroup);
-
-    // --- Layout / sizing ---------------------------------------------------
+    // --- Layout / sizing -------------------------------------------------------
     function layout() {
-      var w = hero.clientWidth || window.innerWidth;
-      var h = hero.clientHeight || window.innerHeight;
+      var w = panel.clientWidth || window.innerWidth;
+      var h = panel.clientHeight || window.innerHeight;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      // Park the centrepiece to the right of the text on wide screens,
-      // centred (and quieter behind the text) on narrow ones.
-      shapeGroup.position.x = w > 900 ? 2.5 : 0;
     }
     layout();
     window.addEventListener("resize", layout);
 
-    // --- Mouse parallax (gentle, lerped) -----------------------------------
+    // --- Mouse parallax (gentle, lerped) ---------------------------------------
     var mouseX = 0;
     var mouseY = 0;
     var camX = 0;
@@ -206,34 +197,42 @@
       mouseY = (e.clientY / window.innerHeight - 0.5) * 2;  // -1 .. 1
     }, { passive: true });
 
-    // --- Pause when it can't be seen ---------------------------------------
+    // --- Pause when it can't be seen ---------------------------------------------
     var tabVisible = !document.hidden;
-    var heroVisible = true;
+    var panelVisible = true;
     document.addEventListener("visibilitychange", function () {
       tabVisible = !document.hidden;
     });
     if ("IntersectionObserver" in window) {
       var observer = new IntersectionObserver(function (entries) {
-        heroVisible = entries[0].isIntersecting;
+        panelVisible = entries[0].isIntersecting;
       }, { threshold: 0.02 });
-      observer.observe(hero);
+      observer.observe(panel);
     }
 
-    // --- Render loop ---------------------------------------------------------
+    // --- Render loop ---------------------------------------------------------------
+    var clock = new THREE.Clock();
     function tick() {
       requestAnimationFrame(tick);
-      if (!tabVisible || !heroVisible) return; // paused — skip the render
+      if (!tabVisible || !panelVisible) return; // paused — skip the render
 
-      wire.rotation.y += 0.0016;
-      wire.rotation.x += 0.0007;
-      inner.rotation.y -= 0.0022;
-      inner.rotation.z += 0.0009;
+      var t = clock.getElapsedTime();
+
+      // Orbs bob gently on individual sine waves.
+      orbs.forEach(function (o) {
+        o.mesh.position.y = o.baseY + Math.sin(t * o.speed + o.phase) * o.amp;
+      });
+
+      // The wireframe breathes very slowly; the particle field drifts.
+      wire.rotation.y = t * 0.12;
+      wire.rotation.x = Math.sin(t * 0.18) * 0.22;
       vertexDots.rotation.copy(wire.rotation);
-      fieldGroup.rotation.y += 0.00035;
+      particles.rotation.y = Math.sin(t * 0.05) * 0.05;
+      worldGroup.rotation.y = Math.sin(t * 0.07) * 0.06;
 
       // Ease the camera toward the mouse for a subtle parallax drift.
-      camX += (mouseX * 0.55 - camX) * 0.04;
-      camY += (-mouseY * 0.35 - camY) * 0.04;
+      camX += (mouseX * 0.5 - camX) * 0.04;
+      camY += (-mouseY * 0.3 - camY) * 0.04;
       camera.position.x = camX;
       camera.position.y = camY;
       camera.lookAt(scene.position);
