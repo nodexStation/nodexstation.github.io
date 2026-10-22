@@ -39,5 +39,4 @@ There is no backend. On submit, the form validates the name, email, and message 
 - Email: nodexstation@gmail.com
 - GitHub: https://github.com/nodexStation
 - LinkedIn: https://www.linkedin.com/company/nodexstation
-- Facebook: https://www.facebook.com/profile.php?id=61576048524952
-- Instagram: https://www.instagram.com/nodex_station
+- Instagram: https://www.instagram.com/nodex_station/
