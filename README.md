@@ -8,7 +8,7 @@ Positioning: *AI automations that sell, save time, and save money* — NodeX Sta
 
 | File | Purpose |
 |---|---|
-| `index.html` | All page content: hero, story, how-it-works, capabilities, product preview, use cases, products, founder, FAQ, closing CTA, contact |
+| `index.html` | All page content: hero, story, how-it-works, capabilities, product preview, selected work, use cases, products, founder, FAQ, closing CTA, contact |
 | `styles.css` | All styling — cinematic dark theme, responsive, no frameworks, no build step |
 | `script.js` | Mobile menu, FAQ accordion, contact-form validation + mailto compose, footer year |
 | `animations.js` | GSAP hero intro, orbital-visual parallax/drift, word reveals, workflow animation, scroll reveals |
@@ -81,8 +81,8 @@ float on the artwork; story statements whose words light up
 progressively as you scroll (scrubbed); the workflow SVG drawing its
 connectors, then activating inputs → agent core → outcomes in
 sequence; a subtle parallax and looping run-highlight on the console
-preview; and one-time fade-up reveals for the capabilities rows, use
-cases, pricing rows, founder, FAQ and contact sections. All GSAP
+preview; and one-time fade-up reveals for the capabilities rows, work
+rows, use cases, pricing rows, founder, FAQ and contact sections. All GSAP
 motion is driven from JS (`gsap.from` / `fromTo`) — no content is
 ever hidden in CSS, so a failed library can never blank the page. No
 scroll pins and no loader overlay, by design.

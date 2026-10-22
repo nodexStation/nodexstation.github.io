@@ -176,6 +176,20 @@ main>section:nth-of-type(even){background:linear-gradient(180deg,rgba(56,36,22,.
 .spec-arrow{font-size:1.35rem;color:var(--muted);text-align:right;transition:transform .25s,color .25s}
 .spec-item:hover .spec-arrow{transform:translateX(6px);color:var(--accent)}
 
+/* ── Selected work — editorial rows with status pills ───────────────── */
+.work-list{list-style:none;border-top:1px solid var(--border)}
+.work-item{display:grid;grid-template-columns:64px 1fr 1.5fr auto;gap:26px;align-items:baseline;padding:30px 6px;border-bottom:1px solid var(--border);transition:background .25s,padding-left .25s}
+.work-item:hover{background:rgba(255,237,215,.025);padding-left:16px}
+.work-index{color:var(--muted);font-weight:600;font-size:.95rem}
+.work-name{font-size:clamp(1.3rem,2.3vw,1.7rem);font-weight:700;letter-spacing:-.02em;transition:color .25s}
+.work-item:hover .work-name{color:var(--accent)}
+.work-name a{color:inherit;text-decoration:none}
+.work-name a:hover{color:var(--accent)}
+.work-desc{color:var(--muted-text);margin-bottom:8px}
+.work-stack{font-size:.86rem;font-weight:600;letter-spacing:.05em;color:var(--muted)}
+.work-status{justify-self:end;text-transform:uppercase;letter-spacing:.14em;font-size:.68rem;font-weight:700;color:#ffb287;border:1px solid rgba(220,80,0,.5);border-radius:999px;padding:7px 13px;white-space:nowrap}
+.work-status.live{background:var(--accent);border-color:var(--accent);color:#fff}
+
 /* ── Product preview console ────────────────────────────────────────── */
 .console{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--panel-shadow)}
 .console-head{display:flex;align-items:center;gap:18px;padding:16px 22px;border-bottom:1px solid var(--border)}
@@ -287,6 +301,9 @@ main>section:nth-of-type(even){background:linear-gradient(180deg,rgba(56,36,22,.
   .spec-item{grid-template-columns:48px 1fr 32px}
   .spec-desc{grid-column:2/3}
   .spec-arrow{grid-column:3;grid-row:1}
+  .work-item{grid-template-columns:48px 1fr auto}
+  .work-detail{grid-column:2/3}
+  .work-status{grid-column:3;grid-row:1}
   .flow-steps{gap:30px}
 }
 @media (max-width:900px){

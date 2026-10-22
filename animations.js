@@ -179,6 +179,9 @@
   // ── Capabilities rows ──────────────────────────────────────────────
   revealGroup(document.querySelectorAll("#capabilities .spec-item"), document.querySelector("#capabilities .spec-list"), { stagger: 0.07, y: 22 });
 
+  // ── Selected work rows ─────────────────────────────────────────────
+  revealGroup(document.querySelectorAll("#work .work-item"), document.querySelector("#work .work-list"), { stagger: 0.07, y: 22 });
+
   // ── Console preview: entrance, parallax, looping row highlight ─────
   var consoleEl = document.querySelector(".console");
   if (consoleEl) {
