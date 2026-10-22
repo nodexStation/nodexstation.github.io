@@ -1,114 +1,188 @@
 /*
- * NodeX Station — GSAP entrance & scroll animations
+ * NodeX Station — GSAP cinematic scroll animations
  * ---------------------------------------------------
  * Progressive enhancement only:
- *  - Everything is animated with gsap.from(), so elements start from their
- *    natural, fully-visible state. No CSS in this site hides animated
- *    elements — if the GSAP CDN fails, the page is simply static and
- *    completely readable.
- *  - If window.gsap is missing, this file does nothing.
- *  - prefers-reduced-motion: all animations are skipped.
- *  - Scroll reveals use ScrollTrigger when it loaded; without it, only the
- *    hero intro plays and the rest of the page stays static.
+ *  - A lightweight scroll listener ALWAYS runs (no GSAP needed) and
+ *    publishes hero scroll progress as window.__nxScroll (0 at top →
+ *    1 when the hero has scrolled away). three-hero.js reads it to
+ *    drift its camera. This keeps the two files decoupled.
+ *  - All motion uses gsap.from() / gsap.fromTo() driven by JS — no CSS
+ *    hides animated content, so if the GSAP CDN fails the page is
+ *    static and completely readable.
+ *  - prefers-reduced-motion: no motion at all (the scroll listener
+ *    still runs — it animates nothing by itself).
+ *  - No pins, no loader. Reveals fire once.
  */
 (function () {
   "use strict";
 
-  if (typeof window.gsap === "undefined") return;
+  // ── Scroll progress bridge (independent of GSAP) ──────────────────
+  var hero = document.querySelector(".hero");
+  function publishScroll() {
+    if (!hero) { window.__nxScroll = 0; return; }
+    var h = hero.offsetHeight || window.innerHeight;
+    var y = window.scrollY || window.pageYOffset || 0;
+    window.__nxScroll = Math.min(Math.max(y / h, 0), 1);
+  }
+  publishScroll();
+  window.addEventListener("scroll", publishScroll, { passive: true });
+  window.addEventListener("resize", publishScroll);
 
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (reduceMotion.matches) return;
+  // ── Motion gate ────────────────────────────────────────────────────
+  if (typeof window.gsap === "undefined") return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   var gsap = window.gsap;
   var hasScrollTrigger = typeof window.ScrollTrigger !== "undefined";
-  if (hasScrollTrigger) {
-    gsap.registerPlugin(window.ScrollTrigger);
-  }
+  if (hasScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
 
-  // --- Hero intro: copy first, then the visual panel and its cards --------
-  var heroCopy = document.querySelectorAll(
-    ".hero .eyebrow, .hero h1, .hero .hero-sub, .hero .hero-actions, .hero .hero-points"
-  );
-  var heroPanel = document.querySelectorAll(".hero .hero-panel");
-  var floatCards = document.querySelectorAll(".hero .float-card");
-
-  var intro = gsap.timeline({ defaults: { ease: "power2.out" } });
-  if (heroCopy.length) {
-    intro.from(heroCopy, {
-      y: 26,
+  // ── Hero intro ─────────────────────────────────────────────────────
+  var heroEls = document.querySelectorAll("[data-hero]");
+  if (heroEls.length) {
+    gsap.from(heroEls, {
+      y: 34,
       opacity: 0,
-      duration: 0.85,
-      stagger: 0.12,
-      clearProps: "transform,opacity"
-    }, 0.1);
-  }
-  if (heroPanel.length) {
-    intro.from(heroPanel, {
-      y: 30,
-      opacity: 0,
-      scale: 0.97,
-      duration: 0.9,
-      clearProps: "transform,opacity"
-    }, 0.35);
-  }
-  if (floatCards.length) {
-    intro.from(floatCards, {
-      y: 24,
-      opacity: 0,
-      scale: 0.92,
-      duration: 0.65,
-      ease: "back.out(1.8)",
-      stagger: 0.14,
-      clearProps: "opacity,scale"
-    }, 0.75);
-    // …then the cards drift gently forever (transform-only yoyo float).
-    // Started after the intro so it never fights the entrance tween;
-    // clearProps above deliberately keeps transform for this to own.
-    intro.eventCallback("onComplete", function () {
-      gsap.to(floatCards, {
-        y: -10,
-        duration: 2.4,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        stagger: 0.35
-      });
+      duration: 1,
+      ease: "power3.out",
+      stagger: 0.13,
+      clearProps: "transform,opacity",
+      delay: 0.1
     });
   }
 
-  if (!hasScrollTrigger) return; // Hero intro only — page remains fully usable.
+  if (!hasScrollTrigger) return; // Intro only — everything stays visible.
 
-  // --- Scroll reveals ------------------------------------------------------
-  // Each group fades up together with a slight stagger when it scrolls in.
-  function revealGroup(elements, triggerEl) {
+  // ── Group reveals ──────────────────────────────────────────────────
+  function revealGroup(elements, triggerEl, opts) {
     if (!elements.length) return;
+    var o = opts || {};
     gsap.from(elements, {
-      y: 28,
+      y: o.y || 30,
       opacity: 0,
-      duration: 0.7,
-      ease: "power2.out",
-      stagger: 0.09,
+      duration: o.duration || 0.85,
+      ease: "power3.out",
+      stagger: o.stagger || 0.09,
       clearProps: "transform,opacity",
       scrollTrigger: {
         trigger: triggerEl || elements[0],
-        start: "top 85%",
+        start: "top 86%",
         once: true
       }
     });
   }
 
-  // Section headers (label → heading → lead) per section.
-  document.querySelectorAll("main .section").forEach(function (section) {
-    var headerEls = section.querySelectorAll(".section-label, h2, .section-lead");
-    revealGroup(headerEls, section);
+  // Section headers throughout.
+  document.querySelectorAll("main .section, .story, .closing").forEach(function (section) {
+    revealGroup(section.querySelectorAll(".section-label, .section-title, .section-lead"), section);
   });
 
-  // Content groups, staggered per group.
-  revealGroup(document.querySelectorAll("#about .two-col > *"));
-  revealGroup(document.querySelectorAll("#about .founder-card"));
-  revealGroup(document.querySelectorAll("#services .card"));
-  revealGroup(document.querySelectorAll("#process .process-card"));
-  revealGroup(document.querySelectorAll("#products .product-card"));
-  revealGroup(document.querySelectorAll("#faq .faq-item"));
-  revealGroup(document.querySelectorAll("#contact .two-col > *"));
+  // ── Story: word-by-word progressive reveal (scrubbed) ─────────────
+  document.querySelectorAll("[data-words]").forEach(function (el) {
+    var words = el.textContent.trim().split(/\s+/);
+    el.setAttribute("aria-label", el.textContent.trim());
+    el.innerHTML = words.map(function (w) {
+      return '<span class="w" aria-hidden="true">' + w + "</span>";
+    }).join(" ");
+    gsap.fromTo(el.querySelectorAll(".w"),
+      { opacity: 0.13 },
+      {
+        opacity: 1,
+        ease: "none",
+        stagger: 0.06,
+        scrollTrigger: {
+          trigger: el,
+          start: "top 82%",
+          end: "bottom 45%",
+          scrub: 0.4
+        }
+      });
+    // The block's index + label rise in as it arrives.
+    var block = el.closest(".story-block");
+    if (block) {
+      revealGroup(block.querySelectorAll(".story-index, .story-label"), block);
+    }
+  });
+
+  // ── Workflow diagram: draw paths, then activate stages ─────────────
+  var flowSvg = document.querySelector(".flow-svg");
+  if (flowSvg) {
+    var paths = flowSvg.querySelectorAll(".flow-path");
+    paths.forEach(function (p) {
+      var len = p.getTotalLength();
+      p.style.strokeDasharray = len;
+      p.style.strokeDashoffset = len;
+    });
+    var flowTl = gsap.timeline({
+      scrollTrigger: { trigger: flowSvg, start: "top 78%", once: true }
+    });
+    flowTl.to(paths, {
+      strokeDashoffset: 0,
+      duration: 1.5,
+      ease: "power2.inOut",
+      stagger: 0.12
+    });
+    [1, 2, 3].forEach(function (step, i) {
+      flowTl.fromTo(
+        flowSvg.querySelectorAll('.flow-node[data-step="' + step + '"]'),
+        { opacity: 0.25 },
+        {
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          onStart: activateStep(step)
+        },
+        0.3 + i * 0.55
+      );
+    });
+    function activateStep(step) {
+      return function () {
+        flowSvg.querySelectorAll(".flow-node").forEach(function (n) {
+          n.classList.toggle("is-on", n.getAttribute("data-step") === String(step));
+        });
+      };
+    }
+    revealGroup(document.querySelectorAll("#how .flow-steps > li"), document.querySelector("#how .flow-steps"));
+    revealGroup(document.querySelectorAll("#how .spec-row-t"), document.querySelector("#how .spec-table"));
+  }
+
+  // ── Capabilities rows ──────────────────────────────────────────────
+  revealGroup(document.querySelectorAll("#capabilities .spec-item"), document.querySelector("#capabilities .spec-list"), { stagger: 0.07, y: 22 });
+
+  // ── Console preview: entrance, parallax, looping row highlight ─────
+  var consoleEl = document.querySelector(".console");
+  if (consoleEl) {
+    revealGroup([consoleEl], consoleEl, { y: 46, duration: 1 });
+    gsap.to(consoleEl, {
+      y: -22,
+      ease: "none",
+      scrollTrigger: {
+        trigger: consoleEl,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.6
+      }
+    });
+    var rows = consoleEl.querySelectorAll(".run-row");
+    if (rows.length) {
+      var loopTl = gsap.timeline({
+        repeat: -1,
+        scrollTrigger: { trigger: consoleEl, start: "top 80%", once: true }
+      });
+      rows.forEach(function (row) {
+        loopTl.fromTo(row,
+          { backgroundColor: "rgba(220,80,0,0)" },
+          { backgroundColor: "rgba(220,80,0,0.10)", duration: 0.45, ease: "sine.inOut" })
+          .to(row, { backgroundColor: "rgba(220,80,0,0)", duration: 0.45, ease: "sine.inOut" }, "+=0.55");
+      });
+    }
+    revealGroup(consoleEl.querySelectorAll(".chat-msg"), consoleEl, { stagger: 0.16, y: 16 });
+  }
+
+  // ── Use cases, pricing, founder, FAQ, contact ──────────────────────
+  revealGroup(document.querySelectorAll("#use-cases .case-row"), document.querySelector("#use-cases .case-list"));
+  revealGroup(document.querySelectorAll("#products .price-row"), document.querySelector("#products .price-table"), { stagger: 0.07, y: 22 });
+  revealGroup(document.querySelectorAll("#founder .founder-mark, #founder .founder-body > *"), document.querySelector("#founder"), { stagger: 0.08 });
+  revealGroup(document.querySelectorAll("#faq .faq-item"), document.querySelector("#faq .faq-list"), { stagger: 0.06, y: 18 });
+  revealGroup(document.querySelectorAll("#contact .contact-grid > *"), document.querySelector("#contact .contact-grid"));
+  revealGroup(document.querySelectorAll(".closing .closing-title, .closing .btn, .closing .closing-note"), document.querySelector(".closing"), { stagger: 0.12, y: 36 });
 })();
