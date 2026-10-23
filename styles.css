@@ -241,6 +241,9 @@ main>section:nth-of-type(even){background:linear-gradient(180deg,rgba(56,36,22,.
 .price-inc{color:var(--muted-text)}
 .price-val{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;text-align:right}
 .price-tag{justify-self:end;text-transform:uppercase;letter-spacing:.14em;font-size:.68rem;font-weight:700;color:#ffb287;border:1px solid rgba(220,80,0,.5);border-radius:999px;padding:7px 13px;white-space:nowrap}
+.price-was{font-size:1rem;font-weight:600;color:var(--muted-text);text-decoration:line-through;margin-right:9px}
+a.price-tag{text-decoration:none;transition:background .25s,border-color .25s,color .25s}
+a.price-tag:hover{background:var(--accent);border-color:var(--accent);color:#fff}
 
 /* ── Founder ────────────────────────────────────────────────────────── */
 .founder-wrap{display:grid;grid-template-columns:auto 1fr;gap:52px;align-items:start}
