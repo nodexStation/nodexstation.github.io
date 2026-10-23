@@ -4,12 +4,22 @@ One-page website for **NodeX Station**, an AI automation studio based in Khulna,
 
 Positioning: *AI automations that sell, save time, and save money* — NodeX Station also builds MERN web apps and e-commerce systems.
 
-**Products — live on Gumroad** ([nodex5.gumroad.com](https://nodex5.gumroad.com)):
+**Products — 14 starters, live on Gumroad** ([nodex5.gumroad.com](https://nodex5.gumroad.com)):
 
 - [MERN Clothing E-commerce Starter](https://nodex5.gumroad.com/l/mern-clothing-store-starter) — $29 (launch offer: $49 → $29 with code LAUNCH20)
 - [MERN SaaS Starter](https://nodex5.gumroad.com/l/mern-saas-starter) — $99
-- [MERN Admin Dashboard Starter](https://nodex5.gumroad.com/l/mern-admin-dashboard) — $29
+- [MERN Food Delivery Starter](https://nodex5.gumroad.com/l/mern-food-delivery-starter) — $49
+- [MERN Online Course (LMS) Starter](https://nodex5.gumroad.com/l/mern-lms-starter) — $49
+- [MERN Hotel Booking Starter](https://nodex5.gumroad.com/l/mern-hotel-booking-starter) — $49
+- [MERN Inventory & POS Starter](https://nodex5.gumroad.com/l/mern-inventory-pos-starter) — $49
+- [MERN Real Estate Starter](https://nodex5.gumroad.com/l/mern-real-estate-starter) — $39
+- [MERN Job Board Starter](https://nodex5.gumroad.com/l/mern-job-board-starter) — $39
+- [MERN Appointment Booking Starter](https://nodex5.gumroad.com/l/mern-appointment-booking-starter) — $39
+- [MERN Community / Social Starter](https://nodex5.gumroad.com/l/mern-community-starter) — $39
 - [MERN AI Chatbot Starter](https://nodex5.gumroad.com/l/mern-ai-chatbot) — $39
+- [MERN Admin Dashboard Starter](https://nodex5.gumroad.com/l/mern-admin-dashboard) — $29
+- [MERN Blog & CMS Starter](https://nodex5.gumroad.com/l/mern-blog-cms-starter) — $29
+- [MERN Agency & Portfolio CMS Starter](https://nodex5.gumroad.com/l/mern-agency-cms-starter) — $29
 
 ## Files
 
