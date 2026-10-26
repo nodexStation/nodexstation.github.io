@@ -4,7 +4,7 @@ One-page website for **NodeX Station**, an AI automation studio based in Khulna,
 
 Positioning: *AI automations that sell, save time, and save money* — NodeX Station also builds MERN web apps and e-commerce systems.
 
-**Products — 14 starters, live on Gumroad** ([nodex5.gumroad.com](https://nodex5.gumroad.com)):
+**Products — 24 starters, live on Gumroad** ([nodex5.gumroad.com](https://nodex5.gumroad.com)):
 
 - [MERN Clothing E-commerce Starter](https://nodex5.gumroad.com/l/mern-clothing-store-starter) — $29 (launch offer: $49 → $29 with code LAUNCH20)
 - [MERN SaaS Starter](https://nodex5.gumroad.com/l/mern-saas-starter) — $99
