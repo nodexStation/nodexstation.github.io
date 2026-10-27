@@ -4,7 +4,7 @@ One-page website for **NodeX Station**, an AI automation studio based in Khulna,
 
 Positioning: *AI automations that sell, save time, and save money* — NodeX Station also builds MERN web apps and e-commerce systems.
 
-**Products — 24 starters, live on Gumroad** ([nodex5.gumroad.com](https://nodex5.gumroad.com)):
+**Products — 34 starters, live on Gumroad** ([nodex5.gumroad.com](https://nodex5.gumroad.com)):
 
 - [MERN Clothing E-commerce Starter](https://nodex5.gumroad.com/l/mern-clothing-store-starter) — $29 (launch offer: $49 → $29 with code LAUNCH20)
 - [MERN SaaS Starter](https://nodex5.gumroad.com/l/mern-saas-starter) — $99
@@ -20,6 +20,26 @@ Positioning: *AI automations that sell, save time, and save money* — NodeX Sta
 - [MERN Admin Dashboard Starter](https://nodex5.gumroad.com/l/mern-admin-dashboard) — $29
 - [MERN Blog & CMS Starter](https://nodex5.gumroad.com/l/mern-blog-cms-starter) — $29
 - [MERN Agency & Portfolio CMS Starter](https://nodex5.gumroad.com/l/mern-agency-cms-starter) — $29
+- [MERN Fitness & Trainer Starter](https://nodex5.gumroad.com/l/mern-fitness-tracker-starter) — $49
+- [MERN Travel & Tour Booking Starter](https://nodex5.gumroad.com/l/mern-travel-booking-starter) — $49
+- [MERN Event Management & Ticketing Starter](https://nodex5.gumroad.com/l/mern-event-ticketing-starter) — $49
+- [MERN Service Marketplace Starter](https://nodex5.gumroad.com/l/mern-service-marketplace-starter) — $49
+- [MERN Car Rental Starter](https://nodex5.gumroad.com/l/mern-car-rental-starter) — $49
+- [MERN Salon & Spa Booking Starter](https://nodex5.gumroad.com/l/mern-salon-booking-starter) — $39
+- [MERN Pharmacy Store Starter](https://nodex5.gumroad.com/l/mern-pharmacy-store-starter) — $39
+- [MERN Charity & Donation Starter](https://nodex5.gumroad.com/l/mern-charity-donation-starter) — $39
+- [MERN Pet Care & Vet Booking Starter](https://nodex5.gumroad.com/l/mern-pet-care-starter) — $39
+- [MERN Bookstore Starter](https://nodex5.gumroad.com/l/mern-bookstore-starter) — $29
+- [MERN Multi-Vendor Marketplace Starter](https://nodex5.gumroad.com/l/mern-multi-vendor-marketplace-starter) — $49
+- [MERN Doctor & Clinic Appointment Starter](https://nodex5.gumroad.com/l/mern-doctor-appointment-starter) — $49
+- [MERN School Management Starter](https://nodex5.gumroad.com/l/mern-school-management-starter) — $49
+- [MERN Taxi & Ride Booking Starter](https://nodex5.gumroad.com/l/mern-taxi-booking-starter) — $49
+- [MERN HR & Employee Management Starter](https://nodex5.gumroad.com/l/mern-hr-management-starter) — $49
+- [MERN CRM & Lead Management Starter](https://nodex5.gumroad.com/l/mern-crm-starter) — $49
+- [MERN Courier & Parcel Delivery Starter](https://nodex5.gumroad.com/l/mern-courier-delivery-starter) — $39
+- [MERN Freelance Services Marketplace Starter](https://nodex5.gumroad.com/l/mern-freelance-marketplace-starter) — $39
+- [MERN Laundry & Cleaning Service Booking Starter](https://nodex5.gumroad.com/l/mern-laundry-booking-starter) — $39
+- [MERN Invoicing & Billing Starter](https://nodex5.gumroad.com/l/mern-invoicing-starter) — $29
 
 ## Files
 
