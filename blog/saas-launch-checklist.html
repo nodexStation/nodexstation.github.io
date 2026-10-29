@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS launch checklist: auth, billing and dashboard before you go live — NodeX Station Blog</title>
+<meta name="description" content="SaaS launch checklist: the accounts, billing and dashboard pieces to have in place before your first paying users, not patched in after.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap">
+<a class="brand" href="../index.html"><span>NodeX <strong>Station</strong></span></a>
+<nav class="site-nav"><a href="../index.html">Home</a><a href="index.html">Blog</a></nav>
+</div></header>
+<main class="blog"><article class="article container">
+<p class="meta">29 Oct 2026 · Main keyword: SaaS launch checklist</p>
+<h1>SaaS launch checklist: auth, billing and dashboard before you go live</h1>
+<p class="lead">A SaaS launch fails quietly when the product works but the business around it does not: nobody can sign up safely, nobody can pay, and nobody can see what they paid for. Get those three right first.</p>
+<div class="hero-panel"><strong>The launch test:</strong><br>Can a stranger sign up, pay, and use the product — and can you see that they did — without you touching anything by hand?</div>
+<h2>What you actually need</h2>
+<ul>
+<li><strong>Authentication that is boring and safe.</strong> Sign up, sign in, password reset, and sessions that actually expire. This is not the place to be clever.</li>
+<li><strong>Real billing, not a "pay later" note.</strong> Plans, a checkout that charges, subscriptions that renew or cancel, and a record of every payment.</li>
+<li><strong>A dashboard the user understands in ten seconds.</strong> What they have, what they can do next, and how to manage their plan. If they have to email you to find out, the dashboard failed.</li>
+<li><strong>An admin view for you.</strong> Users, plans, payments and problems — in one place, with real data.</li>
+</ul>
+<h2>Step by step</h2>
+<ol>
+<li>Define one core job your product does, and one plan structure. Two clear plans beat five confusing ones.</li>
+<li>Build auth first, with password reset tested end to end. A user locked out of a paid account is a refund waiting to happen.</li>
+<li>Connect real billing in test mode, then run a full paid signup yourself: card, charge, access granted, receipt recorded.</li>
+<li>Build the dashboard around the core job, not around settings pages. The first screen should show progress, not configuration.</li>
+<li>Test cancellation and failed payments. These happen to every SaaS; handling them calmly keeps customers.</li>
+<li>Only then add the nice extras: onboarding tours, analytics, integrations. They do not matter if signup and billing do not work.</li>
+</ol>
+<h2>Mistakes to avoid</h2>
+<ul>
+<li><strong>Launching with manual billing.</strong> Taking payments by message and granting access by hand does not scale past a handful of users, and it breaks at night.</li>
+<li><strong>Storing passwords badly or skipping reset.</strong> There is no excuse for either in a product that charges money.</li>
+<li><strong>A dashboard full of charts and no actions.</strong> Users pay for outcomes, not for a wall of graphs.</li>
+<li><strong>Building billing last.</strong> Billing touches auth, access, plans and admin. Bolting it on at the end means rebuilding all four.</li>
+</ul>
+<div class="cta-box">
+<h2>Start from a SaaS foundation, not a blank project</h2>
+<p>The MERN SaaS Starter is a complete SaaS foundation: authentication, real Stripe subscription billing and a working dashboard, live-tested end to end — $99.</p>
+<p><a class="btn btn-accent" href="https://nodex5.gumroad.com/l/mern-saas-starter">Get the SaaS Starter →</a></p>
+<p>Want it custom-built instead? Email <a href="mailto:nodexstation@gmail.com">nodexstation@gmail.com</a>.</p>
+</div>
+<p class="back"><a href="index.html">← All blog posts</a></p>
+</article></main>
+</body>
+</html>
