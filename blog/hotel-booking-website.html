@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel booking website: rooms, availability and reservations that work — NodeX Station Blog</title>
+<meta name="description" content="Hotel booking website: rooms, live availability, reservations and admin, without double bookings or phone-only reservations.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap">
+<a class="brand" href="../index.html"><span>NodeX <strong>Station</strong></span></a>
+<nav class="site-nav"><a href="../index.html">Home</a><a href="index.html">Blog</a></nav>
+</div></header>
+<main class="blog"><article class="article container">
+<p class="meta">29 Oct 2026 · Main keyword: hotel booking website</p>
+<h1>Hotel booking website: rooms, availability and reservations that work</h1>
+<p class="lead">A hotel website fails in one specific way: it shows beautiful rooms, then makes booking so hard that the guest phones, messages, or books somewhere else. The booking flow is the website.</p>
+<div class="hero-panel"><strong>The test:</strong><br>Can a guest pick dates, see only rooms that are actually free, see the real price, and be confirmed — at midnight, without anyone at reception?</div>
+<h2>What you actually need</h2>
+<ul>
+<li><strong>Rooms with real prices and photos that match.</strong> A room type is a promise: bed, size, amenities, price per night. If the photo is a different room, the guest will complain at check-in.</li>
+<li><strong>Live availability by date.</strong> A room booked for those dates must disappear for those dates. This is the whole point of the system.</li>
+<li><strong>A reservation record both sides can check.</strong> Guest name, dates, room, price, status — confirmed, not "we will call you back".</li>
+<li><strong>An admin calendar.</strong> Which rooms are free, which are booked, and what is coming tomorrow — at a glance.</li>
+</ul>
+<h2>Step by step</h2>
+<ol>
+<li>List every room type with its true price, capacity and amenities. Do not list a room you cannot actually sell.</li>
+<li>Set your booking rules first: check-in/out times, cancellation rule, and payment or deposit — and show them before booking, not after.</li>
+<li>Build search by dates first, then rooms, then price, then confirmation. That order prevents the most common booking errors.</li>
+<li>Confirm immediately on screen, with a record the guest can check later.</li>
+<li>Give reception a simple calendar and a way to mark a booking checked in, completed or cancelled.</li>
+<li>After a month, check the pattern: which room types fill, which dates sit empty, and adjust price or rules from that — not from guesswork.</li>
+</ol>
+<h2>Mistakes to avoid</h2>
+<ul>
+<li><strong>Booking by message form.</strong> A form that says "we will reply" is not booking; it is a queue for missed calls.</li>
+<li><strong>Availability that is not live.</strong> Double bookings are not a small bug for a hotel — they are a guest arriving with nowhere to sleep.</li>
+<li><strong>Hiding taxes and fees until the last step.</strong> Guests who see the real total early book more often and complain less.</li>
+<li><strong>Photos that do not match the room.</strong> The fastest way to a bad review is a guest opening a door to a different room than the one they paid for.</li>
+</ul>
+<div class="cta-box">
+<h2>Start from a working booking system</h2>
+<p>The MERN Hotel Booking Starter is a hotel booking system: rooms, live availability, reservations and admin — $49.</p>
+<p><a class="btn btn-accent" href="https://nodex5.gumroad.com/l/mern-hotel-booking-starter">Get the Hotel Booking Starter →</a></p>
+<p>Want it custom-built for your hotel or guesthouse instead? Email <a href="mailto:nodexstation@gmail.com">nodexstation@gmail.com</a>.</p>
+</div>
+<p class="back"><a href="index.html">← All blog posts</a></p>
+</article></main>
+</body>
+</html>
