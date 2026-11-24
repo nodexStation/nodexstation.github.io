@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taxi booking website: dispatch, fares and trip tracking — NodeX Station Blog</title>
+<meta name="description" content="A taxi booking website matches riders with the nearest free driver, shows the fare before the ride starts, and tracks every trip — so the phone stops ringing and the fleet stops guessing.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap">
+<a class="brand" href="../index.html"><span>NodeX <strong>Station</strong></span></a>
+<nav class="site-nav"><a href="../index.html">Home</a><a href="index.html">Blog</a></nav>
+</div></header>
+<main class="blog"><article class="article container">
+<p class="meta">20 Nov 2026 · Main keyword: taxi booking website</p>
+<h1>Taxi booking website: dispatch, fares and trip tracking</h1>
+<p class="lead">A taxi booking website is how a small fleet stops running on phone calls and guesswork. When a rider opens the site, they should see the fare before the ride starts, get matched with the nearest free driver, and watch the trip on a map. When a driver finishes a trip, the next job should already be waiting — not a missed call and a vague "where are you?"</p>
+<p>For a taxi owner with a handful of cars, this is not about competing with the big ride apps. It is about taking the three things you already do by phone — dispatch, fares and trip tracking — and making them work the same way every time, even at 2am. This guide is for owners building a taxi booking website their drivers and riders will actually use.</p>
+<h2>What you actually need</h2>
+<ul>
+<li><strong>Booking that takes a pickup and a destination.</strong> The rider enters where they are and where they are going, on a map or by typing an address. If booking takes more than a minute, the rider will call a competitor instead.</li>
+<li><strong>A fare shown before the ride starts.</strong> The price comes from distance and vehicle type, and the rider sees it before confirming. No fare shown means the rider expects a negotiation — the friction a website exists to remove.</li>
+<li><strong>Dispatch to the nearest free driver.</strong> A new booking goes to the closest available driver, who accepts or declines in one tap; a declined job moves to the next driver automatically.</li>
+<li><strong>Live trip tracking for rider and owner.</strong> The rider watches the car arrive on the map. The owner sees every car on one screen: who is busy, who is free, and where each trip is. A fleet you cannot see is a fleet you cannot manage.</li>
+<li><strong>Driver accounts with trip history and earnings.</strong> Each driver sees their completed trips, earnings and ratings. At the end of the week, nobody argues about how many trips were done — the record is already there.</li>
+<li><strong>Payment and receipts that close the loop.</strong> Cash, card or wallet payment recorded against the trip, with a receipt the rider can keep. A trip with no payment record is a trip that will be disputed later.</li>
+</ul>
+<h2>Step by step</h2>
+<ol>
+<li>Map your real operation first: how many cars, which areas you cover, your base fare and per-kilometre rate, and the hours you run. The fare rules in the system must match the fares your drivers already charge.</li>
+<li>Set up vehicle types and pricing: standard, larger cars, and fixed-rate routes like airport runs. Test a fare from two real addresses against what a driver would quote on the phone.</li>
+<li>Add your drivers with their cars and documents, and let one driver run real bookings for a few days before the whole fleet switches over. A driver who cannot accept a job in seconds will go back to the phone.</li>
+<li>Put the booking form on your homepage and test it as a rider: enter a pickup, see the fare, confirm, and watch the car arrive. If any step confuses you, it will confuse your riders more.</li>
+<li>Give the owner the dispatch screen and a daily routine: check which trips were completed, which drivers are idle, and which areas keep getting bookings. The system only helps if someone watches it every day.</li>
+<li>Add rider accounts and ride history, so repeat customers book in two taps and you can see who your regulars are — the riders worth keeping.</li>
+</ol>
+<h2>Mistakes to avoid</h2>
+<ul>
+<li><strong>Letting dispatch stay on the phone.</strong> If the dispatcher still takes calls and radios drivers, the website is a second system, not a replacement — and the two will disagree about which driver is free. Dispatch belongs in the system, for every booking.</li>
+<li><strong>Hiding the fare until after the ride.</strong> A rider who does not know the price before confirming will either haggle or cancel. Show the fare up front, and make the rule behind it visible.</li>
+<li><strong>Tracking trips nowhere.</strong> If nobody can see where the cars are, a rider who calls to ask where their taxi is gets an answer nobody can trust. Live tracking is not a luxury — it is the answer to your most common call.</li>
+<li><strong>Skipping driver earnings records.</strong> If drivers are paid from memory or handwritten trip sheets, disputes are guaranteed. Every completed trip should already carry its fare, payment method and driver.</li>
+</ul>
+<h2>How NodeX's starter helps</h2>
+<p>The MERN Taxi &amp; Ride Booking Starter is a working taxi booking website built on the MERN stack: rider booking with pickup and destination, fare calculation by distance and vehicle type, dispatch that matches the nearest available driver, live trip tracking, driver accounts with trip history and earnings, and payment records with receipts.</p><div class="cta-box">
+<h2>Start from a complete taxi booking website</h2>
+<p>The MERN Taxi &amp; Ride Booking Starter is a taxi booking website with dispatch, fares and trip tracking — $49.</p>
+<p><a class="btn btn-accent" href="https://nodex5.gumroad.com/l/mern-taxi-booking-starter">Get the Taxi &amp; Ride Booking Starter →</a></p>
+<p>Want it custom-built for your fleet instead? Email <a href="mailto:nodexstation@gmail.com">nodexstation@gmail.com</a>.</p>
+</div>
+<p class="back"><a href="index.html">← All blog posts</a></p>
+</article></main>
+</body>
+</html>
